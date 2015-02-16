@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+$:<< File.join(File.dirname(__FILE__), '../lib')
+require 'gui_interface'
+
+app = Qt::Application.new ARGV
+gui_interface = TTT::UI::GUIInterface.new
+app.exec
