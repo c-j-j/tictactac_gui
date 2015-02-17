@@ -109,7 +109,7 @@ module TTT
       end
 
       def create_new_game
-        TTT::Game.build_game(self, @next_game_type_to_build, @next_board_size_to_build.to_i)
+        TTT::Game.build_game(@next_game_type_to_build, @next_board_size_to_build.to_i)
       end
 
       private
