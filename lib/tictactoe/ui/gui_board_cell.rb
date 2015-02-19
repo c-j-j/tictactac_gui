@@ -1,6 +1,6 @@
 require 'qt'
 
-module TTT
+module TicTacToe
   module UI
     class GUIBoardCell < Qt::Label
 

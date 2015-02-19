@@ -1,10 +1,10 @@
-require 'gui_board_cell'
+require 'tictactoe/ui/gui_board_cell'
 
-describe TTT::UI::GUIBoardCell do
+describe TicTacToe::UI::GUIBoardCell do
 
   let(:cell_number){ 1 }
   let(:parent) {double('parent')}
-  let(:cell) { TTT::UI::GUIBoardCell.new(parent, cell_number)}
+  let(:cell) { TicTacToe::UI::GUIBoardCell.new(parent, cell_number)}
 
   before(:all) do
     @app = Qt::Application.new(ARGV)

@@ -1,8 +1,8 @@
-require 'tictactoe'
+require 'tictactoe/game'
 require 'qt'
-require 'gui_board_cell'
+require 'tictactoe/ui/gui_board_cell'
 
-module TTT
+module TicTacToe
   module UI
     class GUIInterface < Qt::Widget
       attr_reader :cells
@@ -29,11 +29,10 @@ module TTT
       def initialize(game = nil)
         super(nil)
         @ui_grid = Qt::GridLayout.new(self)
-        @next_game_type_to_build = TTT::Game.default_game_type
-        @next_board_size_to_build = TTT::Game.default_board_size
+        @next_game_type_to_build = TicTacToe::Game.default_game_type
+        @next_board_size_to_build = TicTacToe::Game.default_board_size
         @game = game
         init_board(@game.board) unless @game.nil?
-
         init_screen
         show
       end
@@ -53,7 +52,7 @@ module TTT
           return
         end
 
-        @game.play_turn(position)
+        @game.add_move(position)
         update_game_display(@game)
         play_game(@game)
       end
@@ -84,7 +83,7 @@ module TTT
       end
 
       def print_board(board)
-        cells.each_with_index do |cell, index|
+        @cells.each_with_index do |cell, index|
           cell.text = board.get_mark_at_position(index)
         end
       end
@@ -98,10 +97,9 @@ module TTT
       end
 
       def init_board(board)
-        clear_board unless @cells.nil?
-        @cells = []
+        clear_board
         (0...board.number_of_positions).each do |cell_index|
-          cell = TTT::UI::GUIBoardCell.new(self, cell_index)
+          cell = TicTacToe::UI::GUIBoardCell.new(self, cell_index)
           row, column = get_row_and_column_from_index(board, cell_index)
           @ui_grid.addWidget(cell, row + TOP_PADDING, column)
           @cells << cell
@@ -109,7 +107,7 @@ module TTT
       end
 
       def create_new_game
-        TTT::Game.build_game(@next_game_type_to_build, @next_board_size_to_build.to_i)
+        TicTacToe::Game.build_game(@next_game_type_to_build, @next_board_size_to_build.to_i)
       end
 
       private
@@ -120,9 +118,8 @@ module TTT
         update_status(game_presenter.status)
       end
 
-
       def current_player_human?(game)
-        !game.presenter.current_player_is_computer
+        !game.current_player_is_computer?
       end
 
       def create_widgets
@@ -141,24 +138,26 @@ module TTT
       end
 
       def clear_board
-        @cells.each do |cell|
-          cell.hide
-          @ui_grid.removeWidget(cell)
+        unless @cells.nil?
+          @cells.each do |cell|
+            cell.hide
+            @ui_grid.removeWidget(cell)
+          end
         end
+        @cells = []
       end
 
       def create_game_choices_combo_box
-        create_combo_box(TTT::Game::GAME_TYPES, PREPARE_GAME_TYPE_FUNCTION)
+        create_combo_box(TicTacToe::Game::GAME_TYPES, PREPARE_GAME_TYPE_FUNCTION)
       end
 
       def create_game_size_combo_box
-        create_combo_box(TTT::Game::BOARD_SIZES, PREPARE_BOARD_SIZE_FUNCTION)
+        create_combo_box(TicTacToe::Game::BOARD_SIZES, PREPARE_BOARD_SIZE_FUNCTION)
       end
 
       def create_combo_box(choices, select_function)
         selection_menu = Qt::ComboBox.new(self)
         choices.each {|choice| selection_menu.addItem(choice.to_s) }
-
         connect(selection_menu, SIGNAL("activated(QString)"), self, SLOT(select_function))
         selection_menu
       end
@@ -168,12 +167,13 @@ module TTT
       end
 
       def update_status(message)
-        @status_label.text = message
+        status_label.text = message
       end
 
       def get_row_and_column_from_index(board, cell_index)
         cell_index.divmod(board.row_size)
       end
+
     end
   end
 end
