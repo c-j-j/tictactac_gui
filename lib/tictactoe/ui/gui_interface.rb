@@ -15,7 +15,6 @@ module TicTacToe
       attr_reader :ui_grid
 
       INVALID_MOVE_MESSAGE = "Invalid move, try again"
-
       #registers functions so GUI can call them
       START_GAME_FUNCTION = "init_game()"
       PREPARE_GAME_TYPE_FUNCTION = 'prepare_next_game_type_to_create(QString)'
@@ -82,9 +81,9 @@ module TicTacToe
         update_status(INVALID_MOVE_MESSAGE)
       end
 
-      def print_board(board)
+      def print_board(board_positions)
         @cells.each_with_index do |cell, index|
-          cell.text = board.get_mark_at_position(index)
+          cell.text = board_positions[index]
         end
       end
 
@@ -114,7 +113,7 @@ module TicTacToe
 
       def update_game_display(game)
         game_presenter = game.presenter
-        print_board(game_presenter.board)
+        print_board(game_presenter.board_positions)
         update_status(game_presenter.status)
       end
 

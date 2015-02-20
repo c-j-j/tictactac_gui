@@ -6,6 +6,5 @@ describe "Integration Test for GUI" do
   it "plays CVC on GUI" do
       interface = TicTacToe::UI::GUIInterface.new
       interface.init_game
-
   end
 end
