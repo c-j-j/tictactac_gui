@@ -113,7 +113,7 @@ module TicTacToe
 
       def update_game_display(game)
         game_presenter = game.presenter
-        print_board(game_presenter.board_positions)
+        print_board(game_presenter.board_as_array)
         update_status(game_presenter.status)
       end
 
