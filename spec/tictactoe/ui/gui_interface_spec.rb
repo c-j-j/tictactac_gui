@@ -72,7 +72,6 @@ describe TicTacToe::UI::GUIInterface do
   it 'creates game with selected properties' do
     game = gui_interface.create_new_game
     expect(game).to be_kind_of(TicTacToe::Game)
-    expect(game.row_size).to eq(gui_interface.next_board_size_to_build)
   end
 
   it 'calls play turn when game is not over' do
